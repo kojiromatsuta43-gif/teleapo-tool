@@ -152,10 +152,11 @@ function extractNo(text) {
 
 function callGemini(prompt, onSuccess, onError) {
   if (!geminiKey) { onError('APIキーを設定してください'); return; }
-  fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=' + geminiKey, {
+  fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent', {
     method: 'POST',
     headers: { 
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'X-goog-api-key': geminiKey
     },
     body: JSON.stringify({
       contents: [{ parts: [{ text: prompt }] }],
