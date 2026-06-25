@@ -18,7 +18,6 @@
   .btn-save { padding: 8px 14px; font-size: 12px; font-weight: 500; background: #4285f4; color: #fff; border: none; border-radius: 8px; cursor: pointer; white-space: nowrap; }
   .btn-save:hover { background: #3367d6; }
   .api-note { font-size: 11px; color: #888; margin-top: 6px; }
-  .api-note a { color: #4285f4; }
   .api-status { font-size: 12px; margin-top: 6px; color: #888; }
   .api-status.ok { color: #2e7d32; }
 
@@ -62,13 +61,13 @@
 <body>
 <div class="container">
   <!-- APIキー -->
-  <div class="api-box" style="display:none;">
-    <label>🔑 Gemini APIキー（無料）</label>
+  <div class="api-box" id="api-box">
+    <label>🔑 Gemini APIキー</label>
     <div class="api-row">
-      <input type="password" id="api-key" placeholder="AIza...">
+      <input type="password" id="api-key" placeholder="AQ.Ab...">
       <button class="btn-save" onclick="saveKey()">保存</button>
     </div>
-    <div class="api-note">取得先 → <a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com/apikey</a>（Googleアカウントで無料）</div>
+    <div class="api-note">※ 一度保存するとこのブラウザに記憶されます</div>
     <div class="api-status" id="api-status">APIキーを入力して「保存」を押してください</div>
   </div>
 
@@ -122,15 +121,28 @@
 <div class="toast" id="toast">コピーしました！</div>
 
 <script>
-var geminiKey = 'AQ.Ab8RN6If_iQEXk7b3RhsZScYdbYcx3EHjl3VtfZm0WJNp6yxVg';
+var geminiKey = '';
 var autoCounter = 1;
 
-function saveKey() { // disabled
+// 起動時にlocalStorageからキーを読み込む
+window.onload = function() {
+  var saved = localStorage.getItem('gemini_api_key');
+  if (saved) {
+    geminiKey = saved;
+    document.getElementById('api-key').value = saved;
+    var s = document.getElementById('api-status');
+    s.textContent = '✓ APIキー設定済み！';
+    s.className = 'api-status ok';
+  }
+};
+
+function saveKey() {
   var k = document.getElementById('api-key').value.trim();
   if (!k) return;
   geminiKey = k;
+  localStorage.setItem('gemini_api_key', k);
   var s = document.getElementById('api-status');
-  s.textContent = '✓ APIキー設定済み！そのまま使えます。';
+  s.textContent = '✓ 保存しました！次回から自動で読み込まれます。';
   s.className = 'api-status ok';
 }
 
@@ -154,9 +166,7 @@ function callGemini(prompt, onSuccess, onError) {
   if (!geminiKey) { onError('APIキーを設定してください'); return; }
   fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=' + geminiKey, {
     method: 'POST',
-    headers: { 
-      'Content-Type': 'application/json'
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       contents: [{ parts: [{ text: prompt }] }],
       generationConfig: { temperature: 0.1, maxOutputTokens: 800 }
