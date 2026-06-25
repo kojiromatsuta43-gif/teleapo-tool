@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>テレアポ報告書AIツール</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', sans-serif; background: #f5f5f5; color: #1a1a1a; min-height: 100vh; }
+  .container { max-width: 640px; margin: 0 auto; padding: 20px 16px 60px; }
+  h1 { font-size: 17px; font-weight: 600; margin-bottom: 16px; color: #1a1a1a; }
+
+  .api-box { background: #fff; border: 1px solid #e0e0e0; border-radius: 12px; padding: 14px; margin-bottom: 16px; }
+  .api-box label { font-size: 12px; font-weight: 500; color: #666; display: block; margin-bottom: 6px; }
+  .api-row { display: flex; gap: 8px; }
+  .api-box input { flex: 1; font-size: 13px; padding: 8px 10px; border: 1px solid #ddd; border-radius: 8px; font-family: monospace; }
+  .api-box input:focus { outline: none; border-color: #4285f4; }
+  .btn-save { padding: 8px 14px; font-size: 12px; font-weight: 500; background: #4285f4; color: #fff; border: none; border-radius: 8px; cursor: pointer; white-space: nowrap; }
+  .btn-save:hover { background: #3367d6; }
+  .api-note { font-size: 11px; color: #888; margin-top: 6px; }
+  .api-note a { color: #4285f4; }
+  .api-status { font-size: 12px; margin-top: 6px; color: #888; }
+  .api-status.ok { color: #2e7d32; }
+
+  .tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+  .tab { flex: 1; padding: 10px 6px; font-size: 12px; font-weight: 500; text-align: center; cursor: pointer; border-radius: 10px; border: 1px solid #ddd; background: #fff; color: #666; transition: all .15s; }
+  .tab.active-auto { background: #e8f0fe; color: #1a73e8; border-color: #4285f4; }
+  .tab.active-daily { background: #fff8e1; color: #e65100; border-color: #ffb300; }
+
+  .pane { display: none; }
+  .pane.active { display: block; }
+
+  .card { background: #fff; border: 1px solid #e0e0e0; border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+  .hint { font-size: 12px; color: #666; margin-bottom: 10px; line-height: 1.6; }
+  textarea { width: 100%; font-size: 13px; padding: 10px; border: 1px solid #ddd; border-radius: 8px; resize: vertical; font-family: inherit; color: #1a1a1a; min-height: 100px; }
+  textarea:focus { outline: none; border-color: #4285f4; }
+
+  .btn-row { display: flex; gap: 8px; margin-top: 10px; }
+  .btn-main { flex: 1; padding: 11px; font-size: 13px; font-weight: 600; background: #1a73e8; color: #fff; border: none; border-radius: 8px; cursor: pointer; }
+  .btn-main:hover { background: #1557b0; }
+  .btn-main:disabled { background: #aaa; cursor: not-allowed; }
+  .btn-clear { padding: 11px 14px; font-size: 13px; background: #f0f0f0; border: none; border-radius: 8px; cursor: pointer; color: #555; }
+  .btn-clear:hover { background: #e0e0e0; }
+
+  .status { font-size: 13px; color: #888; text-align: center; min-height: 24px; margin-top: 8px; }
+  .status.error { color: #c62828; }
+
+  .result-area { display: none; margin-top: 12px; }
+  .result-badge { display: inline-block; font-size: 12px; font-weight: 500; padding: 4px 12px; border-radius: 20px; margin-bottom: 8px; }
+  .badge-hp { background: #e8f0fe; color: #1a73e8; }
+  .badge-apo { background: #e8f5e9; color: #2e7d32; }
+  .result-text { background: #f8f8f8; border: 1px solid #e0e0e0; border-radius: 10px; padding: 14px 16px; font-size: 13px; line-height: 1.9; white-space: pre-wrap; font-family: 'Courier New', monospace; color: #1a1a1a; }
+  .copy-row { display: flex; gap: 8px; margin-top: 8px; }
+  .btn-copy { flex: 1; padding: 10px; font-size: 13px; font-weight: 500; background: #fff; border: 1px solid #1a73e8; color: #1a73e8; border-radius: 8px; cursor: pointer; }
+  .btn-copy:hover { background: #e8f0fe; }
+  .btn-next { flex: 1; padding: 10px; font-size: 13px; background: #f0f0f0; border: none; border-radius: 8px; cursor: pointer; color: #444; }
+  .btn-next:hover { background: #e0e0e0; }
+
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #2e7d32; color: #fff; padding: 10px 20px; border-radius: 24px; font-size: 13px; display: none; z-index: 999; box-shadow: 0 2px 8px rgba(0,0,0,.2); }
+</style>
+</head>
+<body>
+<div class="container">
+  <!-- APIキー -->
+  <div class="api-box" style="display:none;">
+    <label>🔑 Gemini APIキー（無料）</label>
+    <div class="api-row">
+      <input type="password" id="api-key" placeholder="AIza...">
+      <button class="btn-save" onclick="saveKey()">保存</button>
+    </div>
+    <div class="api-note">取得先 → <a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com/apikey</a>（Googleアカウントで無料）</div>
+    <div class="api-status" id="api-status">APIキーを入力して「保存」を押してください</div>
+  </div>
+
+  <!-- タブ -->
+  <div class="tabs">
+    <button class="tab active-auto" id="tb-auto" onclick="switchTab('auto')">💬 LINE報告</button>
+    <button class="tab" id="tb-daily" onclick="switchTab('daily')">📊 業務報告</button>
+  </div>
+
+  <!-- 自動判定 -->
+  <div class="pane active" id="pane-auto">
+    <div class="card">
+      <p class="hint">スプレッドシートのデータをそのまま貼り付けてください。<br>先頭の番号を自動取得、HP画像送付 / アポ取得を自動判定します。</p>
+      <textarea id="auto-memo" placeholder="例：57	グリーンサークル株式会社	佐藤貴信	0537-72-8888	http://...	アポイント	..."></textarea>
+      <div class="btn-row">
+        <button class="btn-main" id="btn-auto" onclick="generateAuto()">✦ AIで自動判定・生成</button>
+        <button class="btn-clear" onclick="clearAuto()">↺</button>
+      </div>
+      <div class="status" id="status-auto"></div>
+      <div class="result-area" id="res-auto">
+        <div id="badge-auto"></div>
+        <div class="result-text" id="txt-auto"></div>
+        <div class="copy-row">
+          <button class="btn-copy" onclick="doCopy('txt-auto')">コピー</button>
+          <button class="btn-next" onclick="nextAuto()">次の件 →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 業務報告 -->
+  <div class="pane" id="pane-daily">
+    <div class="card">
+      <p class="hint">今日の業務内容を自由に入力してください。AIが自動でパーセンテージを計算して整形します。</p>
+      <textarea id="daily-memo" placeholder="例：6月25日水曜、9時〜18時稼働。架電50件、決済者12件、アポ3件、HP送信8件。HP送信後は20件でアポ1件。"></textarea>
+      <div class="btn-row">
+        <button class="btn-main" id="btn-daily" onclick="generateDaily()">✦ AIで業務報告を生成</button>
+        <button class="btn-clear" onclick="clearDaily()">↺</button>
+      </div>
+      <div class="status" id="status-daily"></div>
+      <div class="result-area" id="res-daily">
+        <div class="result-text" id="txt-daily"></div>
+        <div class="copy-row">
+          <button class="btn-copy" onclick="doCopy('txt-daily')">コピー</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">コピーしました！</div>
+
+<script>
+var geminiKey = 'AQ.Ab8RN6JCqyP1SHhmyxjSo78u6Ukao0JcknBvVgyPlrhhOMwopg';
+var autoCounter = 1;
+
+function saveKey() { // disabled
+  var k = document.getElementById('api-key').value.trim();
+  if (!k) return;
+  geminiKey = k;
+  var s = document.getElementById('api-status');
+  s.textContent = '✓ APIキー設定済み！そのまま使えます。';
+  s.className = 'api-status ok';
+}
+
+function switchTab(t) {
+  ['auto','daily'].forEach(function(id) {
+    document.getElementById('pane-'+id).className = 'pane'+(id===t?' active':'');
+    var tb = document.getElementById('tb-'+id);
+    tb.className = 'tab'+(id===t?' active-'+id:'');
+  });
+}
+
+function extractNo(text) {
+  var m = text.match(/^\s*(\d+)\t/);
+  if (m) return m[1];
+  var m2 = text.match(/^\s*(\d+)\s/);
+  if (m2) return m2[1];
+  return null;
+}
+
+function callGemini(prompt, onSuccess, onError) {
+  if (!geminiKey) { onError('APIキーを設定してください'); return; }
+  fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + geminiKey, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      contents: [{ parts: [{ text: prompt }] }],
+      generationConfig: { temperature: 0.1, maxOutputTokens: 800 }
+    })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(d) {
+    if (d.error) { onError(d.error.message); return; }
+    onSuccess(d.candidates[0].content.parts[0].text.trim());
+  })
+  .catch(function(e) { onError(e.message); });
+}
+
+function generateAuto() {
+  var memo = document.getElementById('auto-memo').value.trim();
+  if (!memo) { alert('内容を入力してください'); return; }
+  if (!geminiKey) { alert('先にAPIキーを設定してください'); return; }
+  var no = extractNo(memo) || String(autoCounter);
+  document.getElementById('res-auto').style.display = 'none';
+  document.getElementById('status-auto').textContent = '⏳ AIが判定・整形中...';
+  document.getElementById('status-auto').className = 'status';
+
+  var prompt = 'あなたはテレアポ営業の報告書AIです。\n'
+    + '入力データから「HP画像送付」か「アポ取得」かを自動判定し、フォーマットに整形してください。\n'
+    + '判定基準：アポ日時・アポ確定・アポイントの記載があれば「アポ取得」、なければ「HP画像送付」。\n'
+    + '不明な項目は空欄のまま。説明文不要。フォーマットのみ返してください。\n\n'
+    + '【HP画像送付フォーマット】\nNo.' + no + '【HP画像送付】\n会社名：\nHP : \n相手の名前・役職 : \nメアド : \n携帯TEL：\nメモ：\n\n'
+    + '【アポ取得フォーマット】\nNo.' + no + '【アポ取得】\n会社名：\nHP : \n相手の名前・役職 : \nメアド : \n携帯TEL：\nアポ日時:\nメモ：\n\n'
+    + '入力データ：\n' + memo;
+
+  callGemini(prompt, function(text) {
+    var isApo = text.indexOf('アポ日時') !== -1;
+    document.getElementById('badge-auto').innerHTML = isApo
+      ? '<span class="result-badge badge-apo">✓ アポ取得として整形（No.' + no + '）</span>'
+      : '<span class="result-badge badge-hp">✓ HP画像送付として整形（No.' + no + '）</span>';
+    document.getElementById('txt-auto').textContent = text;
+    document.getElementById('res-auto').style.display = 'block';
+    document.getElementById('status-auto').textContent = '';
+    autoCounter = parseInt(no) + 1;
+  }, function(err) {
+    document.getElementById('status-auto').textContent = '❌ エラー: ' + err;
+    document.getElementById('status-auto').className = 'status error';
+  });
+}
+
+function clearAuto() {
+  document.getElementById('auto-memo').value = '';
+  document.getElementById('res-auto').style.display = 'none';
+  document.getElementById('status-auto').textContent = '';
+}
+
+function nextAuto() {
+  document.getElementById('auto-memo').value = '';
+  document.getElementById('res-auto').style.display = 'none';
+  document.getElementById('status-auto').textContent = '';
+  document.getElementById('auto-memo').focus();
+}
+
+function generateDaily() {
+  var memo = document.getElementById('daily-memo').value.trim();
+  if (!memo) { alert('内容を入力してください'); return; }
+  if (!geminiKey) { alert('先にAPIキーを設定してください'); return; }
+  document.getElementById('res-daily').style.display = 'none';
+  document.getElementById('status-daily').textContent = '⏳ AIが整形中...';
+  document.getElementById('status-daily').className = 'status';
+
+  var prompt = 'テレアポ業務報告書を作成します。\n'
+    + 'パーセントは（接続率＝接続÷架電、アポ率＝アポ÷接続、HP率＝HP÷接続）で計算。\n'
+    + '説明文不要。フォーマットのみ返してください:\n\n'
+    + '【業務報告】\n日付：\n稼働時間：\n・架電数\n┗　件%\n・決済者接続数\n┗　件%\n・アポ数\n┗　件%\n・HP送信数\n┗　件%\n※HP画像送信後\n・架電数\n┗　\n・アポ数\n┗　\n\n'
+    + '入力データ：\n' + memo;
+
+  callGemini(prompt, function(text) {
+    document.getElementById('txt-daily').textContent = text;
+    document.getElementById('res-daily').style.display = 'block';
+    document.getElementById('status-daily').textContent = '✓ 生成完了';
+  }, function(err) {
+    document.getElementById('status-daily').textContent = '❌ エラー: ' + err;
+    document.getElementById('status-daily').className = 'status error';
+  });
+}
+
+function clearDaily() {
+  document.getElementById('daily-memo').value = '';
+  document.getElementById('res-daily').style.display = 'none';
+  document.getElementById('status-daily').textContent = '';
+}
+
+function doCopy(id) {
+  navigator.clipboard.writeText(document.getElementById(id).textContent).then(function() {
+    var t = document.getElementById('toast');
+    t.style.display = 'block';
+    setTimeout(function() { t.style.display = 'none'; }, 2000);
+  });
+}
+</script>
+</body>
+</html>
