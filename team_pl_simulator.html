@@ -7,22 +7,19 @@
 <style>
   *{box-sizing:border-box;margin:0;padding:0;}
   body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:13px;background:#f5f5f3;color:#1a1a18;min-height:100vh;}
-  .container{max-width:900px;margin:0 auto;padding:1.5rem 1rem 3rem;}
+  .container{max-width:960px;margin:0 auto;padding:1.5rem 1rem 3rem;}
   h1{font-size:18px;font-weight:600;margin-bottom:.25rem;}
   .subtitle{font-size:12px;color:#888;margin-bottom:1.5rem;}
   .sec{font-size:10px;font-weight:600;color:#888;letter-spacing:.08em;text-transform:uppercase;margin:1.25rem 0 .5rem;}
   hr{border:none;border-top:1px solid #e0e0da;margin:1.25rem 0;}
-  /* tabs */
   .month-tabs{display:flex;gap:0;border:1px solid #ccc;border-radius:8px;overflow:hidden;width:fit-content;margin-bottom:1rem;}
   .tab-btn{padding:7px 18px;font-size:12px;cursor:pointer;background:#fff;border:none;color:#555;border-right:1px solid #ccc;}
   .tab-btn:last-child{border-right:none;}
   .tab-btn.active{background:#1a1a18;color:#fff;}
-  /* scenario */
   .scenario-bar{display:flex;gap:10px;margin-bottom:1rem;flex-wrap:wrap;}
   .scenario-card{flex:1;min-width:140px;border:1px solid #e0e0da;border-radius:8px;padding:.6rem .9rem;background:#fff;}
   .scenario-title{font-size:11px;font-weight:600;margin-bottom:3px;}
   .scenario-detail{font-size:11px;color:#888;}
-  /* grid */
   .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1rem;}
   @media(max-width:600px){.grid4{grid-template-columns:repeat(2,1fr);}}
   .card{background:#fff;border-radius:8px;padding:.75rem 1rem;border:1px solid #e0e0da;}
@@ -30,7 +27,6 @@
   .card-val{font-size:20px;font-weight:600;color:#1a1a18;}
   .card-val.pos{color:#1baf7a;}.card-val.neg{color:#e34948;}
   .card-sub{font-size:11px;color:#888;margin-top:2px;}
-  /* table */
   .tbl-wrap{overflow-x:auto;}
   table{width:100%;border-collapse:collapse;font-size:11px;background:#fff;border-radius:8px;overflow:hidden;border:1px solid #e0e0da;}
   th{text-align:right;padding:6px 8px;color:#888;font-weight:500;border-bottom:1px solid #e0e0da;white-space:nowrap;background:#fafaf8;}
@@ -40,13 +36,11 @@
   tr.grand td{background:#f5f5f3;font-weight:600;border-top:2px solid #e0e0da;}
   tr.grand td.pos{color:#1baf7a;}tr.grand td.neg{color:#e34948;}
   tr.group-header td{background:#fafaf8;color:#888;font-size:10px;font-weight:600;padding:4px 8px;}
-  /* badge */
   .badge{display:inline-block;font-size:10px;padding:1px 7px;border-radius:99px;}
   .b-m{background:#f0f0ea;color:#555;border:1px solid #ddd;}
   .b-sl{background:#e6f1fb;color:#185fa5;}
   .b-tl{background:#e1f5ee;color:#0f6e56;}
   .b-kb{background:#faeeda;color:#854f0b;}
-  /* member */
   .member-block{border:1px solid #e0e0da;border-radius:8px;padding:.7rem .9rem;margin-bottom:8px;background:#fff;}
   .member-header{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
   .member-inputs{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;}
@@ -60,17 +54,13 @@
   .add-btn:hover{background:#f5f5f3;}
   .del-btn{cursor:pointer;background:none;border:none;color:#bbb;font-size:16px;margin-left:auto;padding:0 4px;line-height:1;}
   .del-btn:hover{color:#e34948;}
-  /* apo bar */
   .apo-bar{height:4px;border-radius:2px;background:#e0e0da;margin-top:4px;overflow:hidden;}
   .apo-bar-fill{height:100%;border-radius:2px;}
-  /* group label */
   .group-label{font-size:11px;font-weight:600;color:#555;margin:.75rem 0 .3rem;display:flex;align-items:center;gap:6px;}
-  /* row */
   .row{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
   .row label{min-width:150px;font-size:12px;color:#555;}
   .row input[type=number]{width:80px;padding:5px 8px;border:1px solid #ccc;border-radius:6px;background:#fafaf8;color:#1a1a18;font-size:13px;}
   .row .unit{font-size:12px;color:#888;}
-  /* compare */
   .compare-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:1rem;}
   @media(max-width:600px){.compare-grid{grid-template-columns:1fr;}}
   .compare-col{border:1px solid #e0e0da;border-radius:8px;padding:.75rem;background:#fff;}
@@ -81,14 +71,19 @@
   .compare-row{display:flex;justify-content:space-between;font-size:11px;padding:4px 0;border-bottom:1px solid #f0f0ea;}
   .compare-row:last-child{border-bottom:none;font-weight:600;}
   .compare-row .lbl{color:#888;}
-  /* breakdown */
   .breakdown-box{background:#fff;border-radius:8px;padding:10px 14px;margin-bottom:.75rem;border:1px solid #e0e0da;font-size:11px;}
   .breakdown-row{display:flex;gap:12px;align-items:center;padding:3px 0;}
-  /* incen */
   .incen-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:.75rem;}
   .incen-pill{font-size:11px;padding:3px 10px;border-radius:99px;border:1px solid #e0e0da;background:#fafaf8;color:#555;}
-  /* formula */
   .formula-box{font-size:11px;color:#555;background:#fafaf8;border-radius:8px;padding:8px 12px;margin-bottom:.75rem;border:1px solid #e0e0da;line-height:1.7;}
+  /* モード切替トグル */
+  .mode-toggle{display:flex;gap:0;border:1px solid #ccc;border-radius:6px;overflow:hidden;width:fit-content;}
+  .mode-toggle button{padding:4px 12px;font-size:11px;cursor:pointer;background:#fff;border:none;color:#888;border-right:1px solid #ccc;}
+  .mode-toggle button:last-child{border-right:none;}
+  .mode-toggle button.active-auto{background:#e8f0fe;color:#2a78d6;font-weight:600;}
+  .mode-toggle button.active-real{background:#e6faf2;color:#0f6e56;font-weight:600;}
+  .auto-tag{font-size:10px;color:#2a78d6;background:#e8f0fe;border-radius:4px;padding:1px 5px;margin-left:3px;}
+  .real-tag{font-size:10px;color:#0f6e56;background:#e6faf2;border-radius:4px;padding:1px 5px;margin-left:3px;}
 </style>
 </head>
 <body>
@@ -202,8 +197,17 @@ function setTab(t){
   calcAll();
 }
 
-function calcApo(h,s){return Math.floor(h*s.callsPerH/s.apoEvery);}
-function calcCalls(h,s){return Math.round(h*s.callsPerH);}
+// 自動計算
+function calcApoAuto(h,s){return Math.floor(h*s.callsPerH/s.apoEvery);}
+function calcCallsAuto(h,s){return Math.round(h*s.callsPerH);}
+
+// メンバーのアポ数・架電数を取得（モードに応じて自動/実数を返す）
+function getMemberApo(m,s){
+  return m.inputMode==='real' ? (m.realApo||0) : calcApoAuto(m.monthlyHours,s);
+}
+function getMemberCalls(m,s){
+  return m.inputMode==='real' ? (m.realCalls||0) : calcCallsAuto(m.monthlyHours,s);
+}
 
 function calcRevWithBreakdown(prevCum,monthApo){
   if(monthApo<=0)return{total:0,t1:0,t2:0,t3:0,n1:0,n2:0,n3:0};
@@ -224,34 +228,42 @@ function calcMemberRev(memberApo,totalApo,totalRev){
 }
 
 let members=[
-  {id:1,name:'樋熊',  group:'higuma',    rank:'member',monthlyHours:80,hourly:1300},
-  {id:2,name:'新井田',group:'niida',     rank:'member',monthlyHours:60,hourly:1300},
-  {id:3,name:'須藤',  group:'sudo',      rank:'member',monthlyHours:50,hourly:1300},
-  {id:4,name:'北西',  group:'kitanishi', rank:'member',monthlyHours:50,hourly:1300},
-  {id:5,name:'深見',  group:'fukami',    rank:'member',monthlyHours:50,hourly:1300},
-  {id:6,name:'宮田',  group:'miyata',    rank:'member',monthlyHours:50,hourly:1300},
-  {id:7,name:'大友',  group:'otomo',     rank:'member',monthlyHours:50,hourly:1300},
-  {id:8,name:'渡部',  group:'watabe',    rank:'member',monthlyHours:50,hourly:1300},
-  {id:9,name:'中条',  group:'nakajo',    rank:'member',monthlyHours:50,hourly:1300},
+  {id:1,name:'樋熊',  group:'higuma',    rank:'member',monthlyHours:80,hourly:1300,inputMode:'auto',realCalls:0,realApo:0},
+  {id:2,name:'新井田',group:'niida',     rank:'member',monthlyHours:60,hourly:1300,inputMode:'auto',realCalls:0,realApo:0},
+  {id:3,name:'須藤',  group:'sudo',      rank:'member',monthlyHours:50,hourly:1300,inputMode:'auto',realCalls:0,realApo:0},
+  {id:4,name:'北西',  group:'kitanishi', rank:'member',monthlyHours:50,hourly:1300,inputMode:'auto',realCalls:0,realApo:0},
+  {id:5,name:'深見',  group:'fukami',    rank:'member',monthlyHours:50,hourly:1300,inputMode:'auto',realCalls:0,realApo:0},
+  {id:6,name:'宮田',  group:'miyata',    rank:'member',monthlyHours:50,hourly:1300,inputMode:'auto',realCalls:0,realApo:0},
+  {id:7,name:'大友',  group:'otomo',     rank:'member',monthlyHours:50,hourly:1300,inputMode:'auto',realCalls:0,realApo:0},
+  {id:8,name:'渡部',  group:'watabe',    rank:'member',monthlyHours:50,hourly:1300,inputMode:'auto',realCalls:0,realApo:0},
+  {id:9,name:'中条',  group:'nakajo',    rank:'member',monthlyHours:50,hourly:1300,inputMode:'auto',realCalls:0,realApo:0},
 ];
 let nextId=10;
 
-function addMember(){members.push({id:nextId++,name:'',group:'higuma',rank:'member',monthlyHours:20,hourly:1300});render();}
+function addMember(){
+  members.push({id:nextId++,name:'',group:'higuma',rank:'member',monthlyHours:20,hourly:1300,inputMode:'auto',realCalls:0,realApo:0});
+  render();
+}
 function removeMember(id){members=members.filter(m=>m.id!==id);render();}
 function updateMember(id,key,val){
   const m=members.find(m=>m.id===id);
-  if(m){m[key]=key==='name'||key==='group'?val:parseFloat(val)||0;}
+  if(m){m[key]=(key==='name'||key==='group'||key==='inputMode')?val:parseFloat(val)||0;}
   calcAll();
+}
+function toggleMode(id){
+  const m=members.find(m=>m.id===id);
+  if(m){m.inputMode=m.inputMode==='auto'?'real':'auto';}
+  render();
 }
 
 function updateBreakdown(prevCum,totalApo,bd){
   const box=document.getElementById('rev-breakdown');
   const endCum=prevCum+totalApo;
   let html=`<div style="font-weight:600;margin-bottom:6px;">売上内訳（累計${prevCum}件 → ${endCum}件）</div>`;
-  if(bd.n1>0) html+=`<div class="breakdown-row"><span style="color:#888780;min-width:180px;">¥35,000 × ${bd.n1}件（累計〜50件）</span><span style="font-weight:600;">${fmt(bd.t1)}</span></div>`;
-  if(bd.n2>0) html+=`<div class="breakdown-row"><span style="color:#2a78d6;min-width:180px;">¥40,000 × ${bd.n2}件（累計51〜100件）</span><span style="font-weight:600;">${fmt(bd.t2)}</span></div>`;
-  if(bd.n3>0) html+=`<div class="breakdown-row"><span style="color:#1baf7a;min-width:180px;">¥50,000 × ${bd.n3}件（累計101件〜）</span><span style="font-weight:600;">${fmt(bd.t3)}</span></div>`;
-  html+=`<div class="breakdown-row" style="border-top:1px solid #e0e0da;margin-top:6px;padding-top:6px;"><span style="min-width:180px;font-weight:600;">合計売上</span><span style="font-weight:600;">${fmt(bd.total)}</span></div>`;
+  if(bd.n1>0) html+=`<div class="breakdown-row"><span style="color:#888780;min-width:200px;">¥35,000 × ${bd.n1}件（累計〜50件）</span><span style="font-weight:600;">${fmt(bd.t1)}</span></div>`;
+  if(bd.n2>0) html+=`<div class="breakdown-row"><span style="color:#2a78d6;min-width:200px;">¥40,000 × ${bd.n2}件（累計51〜100件）</span><span style="font-weight:600;">${fmt(bd.t2)}</span></div>`;
+  if(bd.n3>0) html+=`<div class="breakdown-row"><span style="color:#1baf7a;min-width:200px;">¥50,000 × ${bd.n3}件（累計101件〜）</span><span style="font-weight:600;">${fmt(bd.t3)}</span></div>`;
+  html+=`<div class="breakdown-row" style="border-top:1px solid #e0e0da;margin-top:6px;padding-top:6px;"><span style="min-width:200px;font-weight:600;">合計売上</span><span style="font-weight:600;">${fmt(bd.total)}</span></div>`;
   box.innerHTML=html;
 }
 
@@ -261,7 +273,7 @@ function render(){
   const si=currentTab==='compare'?0:parseInt(currentTab[1]);
   const s=SCENARIOS[si];
   const prevCum=parseInt(document.getElementById('prev-cumulative').value)||0;
-  const totalApo=members.reduce((sum,m)=>sum+calcApo(m.monthlyHours,s),0);
+  const totalApo=members.reduce((sum,m)=>sum+getMemberApo(m,s),0);
   const bd=calcRevWithBreakdown(prevCum,totalApo);
   updateBreakdown(prevCum,totalApo,bd);
 
@@ -273,20 +285,30 @@ function render(){
     gl.style.paddingLeft=(g.indent*14)+'px';
     gl.innerHTML=`<span style="width:8px;height:8px;border-radius:50%;background:${g.color};display:inline-block;flex-shrink:0;"></span><span>${g.name}</span>`;
     list.appendChild(gl);
+
     gm.forEach(m=>{
-      const apo=calcApo(m.monthlyHours,s);
-      const calls=calcCalls(m.monthlyHours,s);
+      const isReal=m.inputMode==='real';
+      const apo=getMemberApo(m,s);
+      const calls=getMemberCalls(m,s);
+      const autoApo=calcApoAuto(m.monthlyHours,s);
+      const autoCalls=calcCallsAuto(m.monthlyHours,s);
       const incen=apo*INCEN_RATE[m.rank];
       const barPct=Math.min(apo/120*100,100);
       const gi=getG(m.group);
       const div=document.createElement('div');
       div.className='member-block';
       div.style.marginLeft=(gi.indent*14)+'px';
+      div.style.borderLeft=isReal?'3px solid #0f6e56':'3px solid #2a78d6';
+
       div.innerHTML=`
         <div class="member-header">
           <span style="width:6px;height:6px;border-radius:50%;background:${gi.color};display:inline-block;flex-shrink:0;"></span>
           <span class="badge ${RANK_BADGE[m.rank]}">${RANK_LABEL[m.rank]}</span>
           <input class="name-input" placeholder="名前" value="${m.name}" oninput="updateMember(${m.id},'name',this.value)">
+          <div class="mode-toggle">
+            <button onclick="toggleMode(${m.id})" class="${!isReal?'active-auto':''}">自動（見込み）</button>
+            <button onclick="toggleMode(${m.id})" class="${isReal?'active-real':''}">入力（実数値）</button>
+          </div>
           <button class="del-btn" onclick="removeMember(${m.id})">×</button>
         </div>
         <div class="member-inputs">
@@ -306,13 +328,23 @@ function render(){
           <div class="field"><label>月間稼働時間</label>
             <input type="number" value="${m.monthlyHours}" min="0" max="300" step="0.5" oninput="updateMember(${m.id},'monthlyHours',this.value)">
           </div>
-          <div class="field"><label>架電数（自動）</label>
-            <div class="calc-val" style="color:#888;">${calls.toLocaleString()}件</div>
+          ${isReal ? `
+          <div class="field"><label>架電数（実数値）<span class="real-tag">実績</span></label>
+            <input type="number" value="${m.realCalls}" min="0" oninput="updateMember(${m.id},'realCalls',this.value)" style="border-color:#0f6e56;">
           </div>
-          <div class="field"><label>アポ数（自動）</label>
+          <div class="field"><label>アポ数（実数値）<span class="real-tag">実績</span></label>
+            <input type="number" value="${m.realApo}" min="0" oninput="updateMember(${m.id},'realApo',this.value)" style="border-color:#0f6e56;">
+            <div style="font-size:10px;color:#888;margin-top:2px;">見込み：${autoApo}件（${autoCalls.toLocaleString()}架電）</div>
+          </div>
+          ` : `
+          <div class="field"><label>架電数（自動）<span class="auto-tag">見込み</span></label>
+            <div class="calc-val" style="color:#555;">${calls.toLocaleString()}件</div>
+          </div>
+          <div class="field"><label>アポ数（自動）<span class="auto-tag">見込み</span></label>
             <div class="calc-val">${apo}件　インセン${fmt(incen)}</div>
             <div class="apo-bar"><div class="apo-bar-fill" style="width:${barPct}%;background:#2a78d6;"></div></div>
           </div>
+          `}
         </div>`;
       list.appendChild(div);
     });
@@ -325,7 +357,7 @@ function calc(){
   const si=parseInt(currentTab[1]);
   const s=SCENARIOS[si];
   const prevCum=parseInt(document.getElementById('prev-cumulative').value)||0;
-  const totalApo=members.reduce((sum,m)=>sum+calcApo(m.monthlyHours,s),0);
+  const totalApo=members.reduce((sum,m)=>sum+getMemberApo(m,s),0);
   const bd=calcRevWithBreakdown(prevCum,totalApo);
   const totalRev=bd.total;
   const avgUnit=totalApo>0?Math.round(totalRev/totalApo):0;
@@ -342,8 +374,9 @@ function calc(){
     hdr.innerHTML=`<td colspan="12"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:${g.color};margin-right:4px;vertical-align:middle;"></span>${g.name}</td>`;
     tbody.appendChild(hdr);
     gm.forEach(m=>{
-      const calls=calcCalls(m.monthlyHours,s);
-      const apo=calcApo(m.monthlyHours,s);
+      const isReal=m.inputMode==='real';
+      const calls=getMemberCalls(m,s);
+      const apo=getMemberApo(m,s);
       const mRev=calcMemberRev(apo,totalApo,totalRev);
       const incen=apo*INCEN_RATE[m.rank];
       const jikyu=m.monthlyHours*m.hourly;
@@ -353,9 +386,10 @@ function calc(){
       totalJikyu+=jikyu;totalIncen+=incen;totalHours+=m.monthlyHours;totalCalls+=calls;
       const pc=profit>=0?'#1baf7a':'#e34948';
       const gi=getG(m.group);
+      const modeTag=isReal?'<span style="font-size:9px;color:#0f6e56;background:#e6faf2;border-radius:3px;padding:1px 4px;margin-left:2px;">実績</span>':'<span style="font-size:9px;color:#2a78d6;background:#e8f0fe;border-radius:3px;padding:1px 4px;margin-left:2px;">見込</span>';
       const tr=document.createElement('tr');
       tr.innerHTML=`
-        <td>${m.name||'（未入力）'}</td>
+        <td>${m.name||'（未入力）'}${modeTag}</td>
         <td style="font-size:10px;color:#888;">${gi.name}</td>
         <td><span class="badge ${RANK_BADGE[m.rank]}">${RANK_LABEL[m.rank]}</span></td>
         <td>¥${m.hourly.toLocaleString()}</td>
@@ -403,15 +437,15 @@ function renderCompare(){
   const prevCum=parseInt(document.getElementById('prev-cumulative').value)||0;
   let runCum=prevCum;
   const results=SCENARIOS.map(s=>{
-    const totalApo=members.reduce((sum,m)=>sum+calcApo(m.monthlyHours,s),0);
+    const totalApo=members.reduce((sum,m)=>sum+getMemberApo(m,s),0);
     const bd=calcRevWithBreakdown(runCum,totalApo);
     let totalJikyu=0,totalIncen=0,totalHours=0,totalCalls=0;
     members.forEach(m=>{
-      const apo=calcApo(m.monthlyHours,s);
+      const apo=getMemberApo(m,s);
       totalJikyu+=m.monthlyHours*m.hourly;
       totalIncen+=apo*INCEN_RATE[m.rank];
       totalHours+=m.monthlyHours;
-      totalCalls+=calcCalls(m.monthlyHours,s);
+      totalCalls+=getMemberCalls(m,s);
     });
     const totalCost=totalJikyu+totalIncen;
     const r={totalRev:bd.total,totalJikyu,totalIncen,totalApo,totalHours,totalCalls,totalCost,
@@ -447,11 +481,11 @@ function renderCompare(){
   tbody.innerHTML='';
   let runCum2=prevCum;
   const memberVals=SCENARIOS.map(s=>{
-    const totalApo=members.reduce((sum,m)=>sum+calcApo(m.monthlyHours,s),0);
+    const totalApo=members.reduce((sum,m)=>sum+getMemberApo(m,s),0);
     const bd=calcRevWithBreakdown(runCum2,totalApo);
     runCum2+=totalApo;
     return members.map(m=>{
-      const apo=calcApo(m.monthlyHours,s);
+      const apo=getMemberApo(m,s);
       const mRev=calcMemberRev(apo,totalApo,bd.total);
       const profit=mRev-(m.monthlyHours*m.hourly+apo*INCEN_RATE[m.rank]);
       return{apo,profit};
